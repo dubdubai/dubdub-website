@@ -9,7 +9,7 @@ window.Webflow.push(() => {
   const audioHtml = document.getElementById('newAudio') as HTMLAudioElement;
   const audioLinks = document.querySelectorAll('audio');
   const canvasEl = document.querySelector('#audWave') as HTMLCanvasElement;
-  console.log(canvasEl);
+  // console.log(canvasEl);
   const HEIGHT = 150;
   const WIDTH = 500;
   const ctx = canvasEl.getContext('2d');
@@ -24,28 +24,43 @@ window.Webflow.push(() => {
 
   if (!dbAudioEl || !ctx) return;
 
-  const audioSources = [] as unknown;
-  const audioContexts = [] as unknown;
-  audioLinks.forEach((audio, i) => {
-    const audCtx = new AudioContext();
-    const audioSource = audCtx.createMediaElementSource(audio);
-    audio.setAttribute(`audioel`, `${i + 1}`);
-    audio.classList.add('audiokoko');
-    // console.log(audio);
-    //console.log(audioSource);
-    audioSources.push(audioSource) as MediaElementAudioSourceNode;
-    audioContexts.push(audCtx);
-  });
+  // const audioSources = [] as Array<MediaElementAudioSourceNode>;
+  // const audioContexts = [] as Array<AudioContext>;
 
-  console.log(audioSources);
-  console.log(audioContexts);
+  // audioLinks.forEach((audio, i) => {
+  //   const audCtx = new AudioContext();
+  //   const audioSource = audCtx.createMediaElementSource(audio);
+  //   audio.setAttribute(`audioel`, `${i + 1}`);
+  //   audio.classList.add('audiokoko');
+  //   analyzer = audCtx.createAnalyser();
+  //   audioSource.connect(analyzer);
+  //   analyzer.connect(audCtx.destination);
+  //   analyzer.fftSize = 64;
+  //   bufferLenth = analyzer.frequencyBinCount;
+  //   console.log(bufferLenth);
+
+  //   //Pusing and creating array for tha audio context and audio souces
+  //   audioSources.push(audioSource);
+  //   audioContexts.push(audCtx);
+  // });
+
+  //console.log(audioSources);
+  // console.log(audioContexts);
 
   dbAudioEl.forEach((el, i) => {
     el.addEventListener('click', function (e) {
-      const audEl = el.querySelector('audio') as HTMLAudioElement;
-      console.log(audEl);
-      const audNum = audEl.getAttribute(`audioel`);
-      //    console.log(+audNum);
+      const audio = el.querySelector('audio') as HTMLAudioElement;
+      console.log(audio);
+
+      audioLinks.forEach((audio: HTMLAudioElement) => {
+        if (!audio.pause) return;
+        audio.pause();
+        audio.currentTime = 0;
+      });
+
+      audio.play();
+
+      // const audNum = audEl.getAttribute(`audioel`);
 
       //console.log(audioCOntexts[0]);
       // console.log(audioCOntexts[i]);
