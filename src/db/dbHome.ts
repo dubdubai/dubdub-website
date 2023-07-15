@@ -5,7 +5,7 @@ window.Webflow.push(() => {
   console.log('Db script loaded');
 
   // const AudioContext = window.AudioContext || window.webkitAudioContext;
-
+  animate();
   const dbAudioEl = document.querySelectorAll('[db-audio]');
   const audioHtml = document.getElementById('newAudio') as HTMLAudioElement;
   const audioLinks = document.querySelectorAll('audio');
@@ -19,7 +19,6 @@ window.Webflow.push(() => {
 
   videoTab();
   handleVideoUpdate();
-  animate();
 
   //let audioSource;
   let analyzer;
