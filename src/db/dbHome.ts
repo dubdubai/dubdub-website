@@ -1,5 +1,5 @@
+import { animate } from './animation';
 import { handleVideoUpdate, videoTab } from './videoTabs';
-
 window.Webflow ||= [];
 window.Webflow.push(() => {
   console.log('Db script loaded');
@@ -19,6 +19,7 @@ window.Webflow.push(() => {
 
   videoTab();
   handleVideoUpdate();
+  animate();
 
   //let audioSource;
   let analyzer;
