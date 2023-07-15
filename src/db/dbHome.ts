@@ -1,11 +1,11 @@
-import { animate } from './animation';
+//import { animate } from './animation';
 import { handleVideoUpdate, videoTab } from './videoTabs';
 window.Webflow ||= [];
 window.Webflow.push(() => {
   console.log('Db script loaded');
 
   // const AudioContext = window.AudioContext || window.webkitAudioContext;
-  animate();
+  //animate();
   const dbAudioEl = document.querySelectorAll('[db-audio]');
   const audioHtml = document.getElementById('newAudio') as HTMLAudioElement;
   const audioLinks = document.querySelectorAll('audio');
