@@ -1,11 +1,10 @@
 import videoLinks from './videoDataStructure';
 
-//console.log(videoLinks);
+//https://cdn.jsdelivr.net/gh/dubdubai/dubdub-website/master/dist/db/dbHome.js dubdub-website/blob/master/dist/index.js
 
 const vidTabbtn = [...document.querySelectorAll('.tab-btn')];
-//const langBtn = [...document.querySelectorAll('.lng-btn')];
+const firstBtn = document.querySelector('[db-tab="1"]') as HTMLAnchorElement;
 const langBtnWrap = document.querySelector('.language-wrap') as HTMLElement;
-//const langBtnFirst = document.querySelector('.lng-btn');
 
 const activeVidbtn = vidTabbtn.filter((el) => {
   return el.hasAttribute('db-tab');
@@ -65,8 +64,9 @@ export const videoTab = function () {
     });
   });
   ////performing the click function on page load
-  const [firstbtn] = activeVidbtn;
-  firstbtn.click();
+  //   const [firstbtn] = activeVidbtn;
+  firstBtn.click();
+  //   firstbtn.click();
 };
 
 //<a posterimg="https://unsplash.com/s/photos/img" english-url="http://google.com" href="#" class="lng-btn w-button">US English</a>
