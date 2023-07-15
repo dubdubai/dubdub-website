@@ -1,4 +1,5 @@
-//import dotenv from 'dotenv';
+import { handleVideoUpdate, videoTab } from './videoTabs';
+
 window.Webflow ||= [];
 window.Webflow.push(() => {
   console.log('Db script loaded');
@@ -15,6 +16,9 @@ window.Webflow.push(() => {
   const ctx = canvasEl.getContext('2d');
   canvasEl.width = WIDTH;
   canvasEl.height = HEIGHT;
+
+  videoTab();
+  handleVideoUpdate();
 
   //let audioSource;
   let analyzer;
