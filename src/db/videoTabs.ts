@@ -5,23 +5,31 @@ import videoLinks from './videoDataStructure';
 const vidTabbtn = [...document.querySelectorAll('.tab-btn')];
 const firstBtn = document.querySelector('[db-tab="1"]') as HTMLAnchorElement;
 const langBtnWrap = document.querySelector('.language-wrap') as HTMLElement;
+const btnchild = [...langBtnWrap.children];
 const playBtn = document.querySelector('[db-element="play"]') as HTMLElement;
+const videoUrlWrap = document.querySelector('[db-element="video"]') as HTMLVideoElement;
+const videoSourceUrl = videoUrlWrap.querySelector('source') as HTMLSourceElement;
 
-console.log(playBtn);
+//console.log(playBtn);
 
 const activeVidbtn = vidTabbtn.filter((el) => {
   return el.hasAttribute('db-tab');
 });
 
-export const handleVideoUpdate = function () {
-  const videoUrlWrap = document.querySelector('[db-element="video"]') as HTMLVideoElement;
-  const videoSourceUrl = videoUrlWrap.querySelector('source') as HTMLSourceElement;
+const renderVideo = function (url) {
+  videoUrlWrap.poster = `https://uploads-ssl.webflow.com/64a1953c1a72bd5a81a24f3d/64b2dd8d4c059eab34058ca3_videocover-min.webp`;
+  videoSourceUrl.src = `${url}`;
+  videoUrlWrap.load();
+  videoUrlWrap.play();
+  videoUrlWrap.muted = false;
+};
 
+export const handleVideoUpdate = function () {
   //  console.log(langBtnWrap.children);
 
   langBtnWrap.addEventListener('click', (e) => {
     const clickedTarget = e.target as HTMLAnchorElement;
-    const btnchild = [...langBtnWrap.children];
+
     btnchild.forEach((btn) => {
       btn.classList.remove('is-active');
     });
@@ -29,18 +37,27 @@ export const handleVideoUpdate = function () {
     ///adding active class to the clicked element
     clickedTarget.classList.add('is-active');
     //  btnchild.;
-    //console.log(clickedTarget);
-    ////remove active class from any child element
-    const posterImgUrl = clickedTarget.getAttribute('posterimg');
-    const videoUrl = clickedTarget.getAttribute('video-url');
 
-    videoUrlWrap.poster = `${posterImgUrl}`;
-    videoSourceUrl.src = `${videoUrl}`;
-    videoUrlWrap.load();
-    // playBtn.addEventListener('click', (e) => {
-    //   videoUrlWrap.play();
-    // });
-    // videoUrlWrap.play();
+    ///getting the tab Btn with active class
+    const activeTabBtn = activeVidbtn.find((btnLang) => btnLang.classList.contains('active'));
+    console.log(activeTabBtn);
+    console.log(clickedTarget);
+
+    const attNum = clickedTarget?.getAttribute('db-tab');
+    if (!attNum || !activeTabBtn) return;
+    const idNum: number = +attNum;
+    //console.log(idNum);
+    const urlDetails = videoLinks.find((links) => {
+      return links.id === idNum;
+    });
+
+    const getVideoName = activeTabBtn?.getAttribute('db-vidname');
+    // console.log(getVideoName);
+    if (!getVideoName) return;
+
+    const videoUrl = urlDetails[getVideoName];
+    renderVideo(videoUrl);
+    //console.log(videoUrl);
   });
 
   // playBtn.addEventListener('click', (e) => {
@@ -49,12 +66,6 @@ export const handleVideoUpdate = function () {
 };
 
 export const videoTab = function () {
-  const updateUrls = function (htmlWrapper: HTMLElement, data) {
-    htmlWrapper.innerHTML = `<a posterimg="${data.posterImg}" video-url="${data.englishVideo}" href="#" class="lng-btn w-button">US English</a><a posterimg="${data.posterImg}" video-url="${data.spanish}" href="#" class="lng-btn w-button">Spanish(Portugese)</a><a posterimg="${data.posterImg}" video-url="${data.spanishLatin}" href="#" class="lng-btn w-button">Spanish(Latin)</a><a posterimg="${data.posterImg}" video-url="${data.marathi}" href="#" class="lng-btn w-button">Marathi</a><a posterimg="${data.posterImg}" video-url="${data.german}" href="#" class="lng-btn w-button">German</a><a posterimg="${data.posterImg}" video-url="${data.hindi}" href="#" class="lng-btn w-button">Hindi</a><a posterimg="${data.posterImg}" video-url="${data.cantonese}" href="#" class="lng-btn w-button">Cantonese</a>`;
-  };
-
-  //<div class="language-wrap"><a posterimg="" english-url="" href="#" class="lng-btn is-active w-button">US English</a><a posterimg="" spanish-port="" href="#" class="lng-btn w-button">Spanish(Portugese)</a><a posterimg="" spanish-latin="" href="#" class="lng-btn w-button">Spanish(Latin)</a><a posterimg="" marathi-url="" href="#" class="lng-btn w-button">Marathi</a><a posterimg="" german-url="" href="#" class="lng-btn w-button">German</a><a posterimg="" hindi-url="" href="#" class="lng-btn w-button">Hindi</a><a posterimg="" cantonese-url="" href="#" class="lng-btn w-button">Cantonese</a></div>
-
   // console.log(langBtnWrap);
   activeVidbtn.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -65,20 +76,59 @@ export const videoTab = function () {
       ////add the active class to the clicked element
       btn.classList.add('active');
 
-      const attNum = btn.getAttribute('db-tab');
-      if (!attNum) return;
-      const btnNum: number = +attNum;
-      //console.log(btnNum);
+      ////////Get the button with active class
+      const activeBtn = btnchild.find((btnLang) => btnLang.classList.contains('is-active'));
+      //console.log(activeBtn);
+      const clickedName = btn.getAttribute('db-vidname') as string;
+
+      const attNum = activeBtn?.getAttribute('db-tab');
+      if (!attNum || !clickedName) return;
+      const idNum: number = +attNum;
+      //console.log(idNum);
       const urlDetails = videoLinks.find((links) => {
-        return links.id === btnNum;
+        return links.id === idNum;
       });
-      updateUrls(langBtnWrap, urlDetails);
+
+      const videoUrl = urlDetails[clickedName];
+
+      renderVideo(videoUrl);
+      //console.log(videoUrl);
     });
   });
+
+  //select the fist element when scrolled into view
+  const vidTabSection = document.querySelector('[db-section="videotab"]') as HTMLElement;
+  if (!vidTabSection) return;
+  const videoActive = function (entries: Array<object>, et) {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        firstLangBtn.classList.add('is-active');
+        firstTabBtn.click();
+
+        tabObserve.unobserve(vidTabSection);
+      }
+    });
+  };
+  const options = {
+    threshold: 0.2,
+  };
+  const tabObserve = new IntersectionObserver(videoActive, options) as IntersectionObserver;
+
+  tabObserve.observe(vidTabSection);
+
+  const [firstTabBtn] = activeVidbtn;
+  const [firstLangBtn] = btnchild;
+
+  //firstTabBtn.click();
+
+  //console.log(firstLangBtn);
+  //console.log(firstTabBtn);
+  //console.log(firstLangBtn, firstTabBtn);
+
   ////performing the click function on page load
   //   const [firstbtn] = activeVidbtn;
-  firstBtn.click();
-  //   firstbtn.click();
+  // firstBtn.click();
+  // //   firstbtn.click();
 };
 
 //<a posterimg="https://unsplash.com/s/photos/img" english-url="http://google.com" href="#" class="lng-btn w-button">US English</a>
