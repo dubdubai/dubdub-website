@@ -2,10 +2,10 @@ const videoLinks = [
   {
     title: 'content creator',
     id: 1,
-    posterImg:
-      'https://uploads-ssl.webflow.com/64a1953c1a72bd5a81a24f3d/64b2dd8d4c059eab34058ca3_videocover-min.webp',
-    englishVideo: 'http://twitter.com',
-    spanish: 'http://google.com',
+    posterImg: '',
+    englishVideo:
+      'https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4',
+    spanish: 'https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4',
     spanishLatin: 'http://google.com',
     marathi: 'http://google.com',
     german: 'http://google.com',
@@ -29,7 +29,7 @@ const videoLinks = [
     id: 3,
     posterImg: 'https://unsplash.com/s/photos/img',
     englishVideo: 'http://google.com',
-    spanish: 'http://google.com',
+    spanish: 'https://www.youtube.com/watch?v=8Ch7dqMpNlI',
     spanishLatin: 'http://google.com',
     marathi: 'http://google.com',
     german: 'http://google.com',

@@ -5,6 +5,9 @@ import videoLinks from './videoDataStructure';
 const vidTabbtn = [...document.querySelectorAll('.tab-btn')];
 const firstBtn = document.querySelector('[db-tab="1"]') as HTMLAnchorElement;
 const langBtnWrap = document.querySelector('.language-wrap') as HTMLElement;
+const playBtn = document.querySelector('[db-element="play"]') as HTMLElement;
+
+console.log(playBtn);
 
 const activeVidbtn = vidTabbtn.filter((el) => {
   return el.hasAttribute('db-tab');
@@ -33,7 +36,16 @@ export const handleVideoUpdate = function () {
 
     videoUrlWrap.poster = `${posterImgUrl}`;
     videoSourceUrl.src = `${videoUrl}`;
+    videoUrlWrap.load();
+    // playBtn.addEventListener('click', (e) => {
+    //   videoUrlWrap.play();
+    // });
+    // videoUrlWrap.play();
   });
+
+  // playBtn.addEventListener('click', (e) => {
+  //   console.log(e.target);
+  // });
 };
 
 export const videoTab = function () {
