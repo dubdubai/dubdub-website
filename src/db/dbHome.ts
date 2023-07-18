@@ -11,7 +11,8 @@ window.Webflow.push(() => {
   const audioLinks = document.querySelectorAll('audio');
   const canvasEl = document.querySelector('#audWave') as HTMLCanvasElement;
   // console.log(canvasEl);
-  const HEIGHT = 150;
+  console.log(dbAudioEl);
+  const HEIGHT = 200;
   const WIDTH = 500;
   const ctx = canvasEl.getContext('2d');
   canvasEl.width = WIDTH;
@@ -23,65 +24,162 @@ window.Webflow.push(() => {
   //let audioSource;
   let analyzer;
   let bufferLenth: number;
+  //let audioSource;
 
   //console.log(audioLinks);
 
   if (!dbAudioEl || !ctx) return;
 
-  // const audioSources = [] as Array<MediaElementAudioSourceNode>;
-  // const audioContexts = [] as Array<AudioContext>;
+  const audioSources = [] as Array<MediaElementAudioSourceNode>;
+  const audioContexts = [] as Array<AudioContext>;
 
-  // audioLinks.forEach((audio, i) => {
-  //   const audCtx = new AudioContext();
-  //   const audioSource = audCtx.createMediaElementSource(audio);
-  //   audio.setAttribute(`audioel`, `${i + 1}`);
-  //   audio.classList.add('audiokoko');
-  //   analyzer = audCtx.createAnalyser();
-  //   audioSource.connect(analyzer);
-  //   analyzer.connect(audCtx.destination);
-  //   analyzer.fftSize = 64;
-  //   bufferLenth = analyzer.frequencyBinCount;
-  //   console.log(bufferLenth);
+  audioLinks.forEach((audio, i) => {
+    const audCtx = new AudioContext();
+    const audioSource = audCtx.createMediaElementSource(audio);
+    audio.setAttribute(`audioel`, `${i + 1}`);
+    audio.classList.add('audiokoko');
+    // analyzer = audCtx.createAnalyser();
+    // audioSource.connect(analyzer);
+    // analyzer.connect(audCtx.destination);
+    // analyzer.fftSize = 64;
+    // bufferLenth = analyzer.frequencyBinCount;
+    // //const dataArray = new Uint8Array(bufferLenth);
 
-  //   //Pusing and creating array for tha audio context and audio souces
-  //   audioSources.push(audioSource);
-  //   audioContexts.push(audCtx);
-  // });
+    // console.log(bufferLenth);
 
-  //console.log(audioSources);
-  // console.log(audioContexts);
+    //Pusing and creating array for tha audio context and audio souces
+    audioSources.push(audioSource);
+    audioContexts.push(audCtx);
+  });
+
+  console.log(audioSources);
+  console.log(audioContexts);
 
   dbAudioEl.forEach((el, i) => {
     el.addEventListener('click', function (e) {
       const audio = el.querySelector('audio') as HTMLAudioElement;
       console.log(audio);
 
+      ////remove playing class from other elements
+      dbAudioEl.forEach((el) => {
+        el.classList.remove('playing');
+      });
+      ////add playing class to the clicked  elements
+      el.classList.add('playing');
+
+      //check if other audios are playing and pause it
       audioLinks.forEach((audio: HTMLAudioElement) => {
         if (!audio.pause) return;
         audio.pause();
         audio.currentTime = 0;
+        audio.volume = 0.5;
       });
 
+      // audio.addEventListener('playing', (e) => {
+      //   console.log('playing');
+      // });
+
+      audio.muted = false;
       audio.play();
+      if (audioContexts[i].state === 'suspended') audioContexts[i].resume(); /////   //console.log(audioContexts[i].state);
 
-      // const audNum = audEl.getAttribute(`audioel`);
+      audio.setAttribute(`audioel`, `${i + 1}`);
+      audio.classList.add('audiokoko');
+      analyzer = audioContexts[i].createAnalyser();
+      // analyzer.maxDecibels = -5;
+      //analyzer.minDecibels = -10;
 
-      //console.log(audioCOntexts[0]);
-      // console.log(audioCOntexts[i]);
-      // analyzer = audioSources[+audNum].createAnalyser();
-      ////  audioSources[+audNum].connect(analyzer);
-      // audioContexts[+audNum];
-      //console.log(audioSources[+audNum]);
+      //console.log(audioSources[i]);
+      audioSources[i].connect(analyzer);
+      const gainNode = audioContexts[i].createGain();
+      console.log(gainNode);
 
-      //analyzer.connect(audioContexts[+audNum].destination);
-      // console.log(analyzer.fftSize);
-      //     // analyzer.fftSize = 1024; ///////How much data we want to collect
-      //     // bufferLenth = analyzer.frequencyBinCount;
-      //     //console.log(bufferLenth);
+      analyzer.connect(audioContexts[i].destination);
+      analyzer.fftSize = 1024; ////how much data we want to process
+      bufferLenth = analyzer.frequencyBinCount;
+
+      const dataArray = new Uint8Array(bufferLenth);
+      const timeData = new Uint8Array(bufferLenth);
+      const freqData = new Uint8Array(bufferLenth);
+
+      drawTimeData(timeData);
+      //drawFrequency(freqData);
+      // drawFrequency(freqData);
+
+      audio.addEventListener('ended', (e) => {
+        el.classList.remove('playing');
+        console.log('end');
+      });
     });
   });
 
-  ////Working with the audio array
+  function drawTimeData(timeData) {
+    if (!ctx) return;
+    // console.log(timeData);
+    analyzer.getByteTimeDomainData(timeData);
+    // analyzer.getFloatTimeDomainData(timeData);
+    // analyzer.getByteFrequencyData(timeData);
+
+    /////Clear the canvas
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#796EAD80';
+    ctx.beginPath();
+    const sliceWidth = WIDTH / bufferLenth;
+    let x = 0;
+    timeData.forEach((data, i) => {
+      const v = data / 128;
+      const y = (v * HEIGHT) / 2;
+      ////draw linws
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+      x += sliceWidth;
+    });
+    ctx.stroke();
+
+    ////calling itself as soon as possible
+    requestAnimationFrame(() => drawTimeData(timeData));
+  }
+
+  function drawFrequency(freqData) {
+    if (!ctx) return;
+    analyzer.getByteFrequencyData(freqData);
+
+    console.log(freqData);
+    /////Clear the canvas
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#796EAD80';
+    ctx.beginPath();
+    const barWidth = WIDTH / bufferLenth;
+    let x = 0;
+    freqData.forEach((amount) => {
+      //0 to 255
+      const percent = amount / 255;
+      const berHeight = HEIGHT * percent;
+      //convert the color to hsl todo
+      ctx.fillStyle = '#796EAD80';
+      // const v = data / 128;
+      // const y = (v * HEIGHT) / 2;
+      // ////draw linws
+      // if (i === 0) {
+      //   ctx.moveTo(x, y);
+      // } else {
+      //   ctx.lineTo(x, y);
+      // }
+      // x += sliceWidth;
+      ctx.fillRect(x, HEIGHT - berHeight, barWidth, berHeight);
+      x += barWidth + 2;
+    });
+
+    requestAnimationFrame(() => drawFrequency(freqData));
+  }
+
+  ///Working with the audio array
   // audioLinks.forEach((audio, i) => {
   //   const audContenxt = new AudioContext();
   //   const audioSource = audContenxt.createMediaElementSource(audio);
@@ -164,33 +262,7 @@ window.Webflow.push(() => {
   //     //  audioSource.connect(analyzer);
   //     //analyzer.connect(audioCtx.destination);
   //     // analyzer.fftSize = 1024; ///////How much data we want to collect
-  //     // bufferLenth = analyzer.frequencyBinCount;
-  //     //console.log(bufferLenth);
-
-  //     // const timeData = new Uint8Array(bufferLenth);
-  //     // const freqData = new Uint8Array(bufferLenth);
-
-  //     // function drawTimeData() {
-  //     //   let x: number;
-  //     //   //console.log(timeData);
-
-  //     //   analyzer.getByteTimeDomainData(timeData); //inject the time data into our timeData array
-  //     //   //1 clear the canvas
-
-  //     //   //set up some canvas drawing
-  //     //   ctx.lineWidth = 3;
-  //     //   ctx.strokeStyle = 'round';
-  //     //   ctx.strokeStyle = '#796EAD80';
-  //     //   ctx?.beginPath();
-  //     //   const sliceWidth = WIDTH / bufferLenth;
-  //     //   x = 0;
-  //     //   ctx?.clearRect(0, 0, WIDTH, HEIGHT);
-  //     //   // timeData.forEach((data, i) => {
-  //     //   //   barHeight = data[i] * 2;
-  //     //   //   ctx.fillStyle = '#796EAD80';
-  //     //   //   ctx?.fillRect(x, canvasEl.height - barHeight, sliceWidth, barHeight);
-  //     //   //   x += sliceWidth;
-  //     //   // });
+  //
 
   //     //   timeData.forEach((data: number, i: number) => {
   //     //     const v = data / 128;

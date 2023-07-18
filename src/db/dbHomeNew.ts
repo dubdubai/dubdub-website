@@ -7,7 +7,7 @@ window.Webflow.push(() => {
   // const AudioContext = window.AudioContext || window.webkitAudioContext;
   //animate();
   const dbAudioEl = document.querySelectorAll('[db-audio]');
-  const audioHtml = document.getElementById('newAudio') as HTMLAudioElement;
+  //const audioHtml = document.getElementById('newAudio') as HTMLAudioElement;
   const audioLinks = document.querySelectorAll('audio');
   const canvasEl = document.querySelector('#audWave') as HTMLCanvasElement;
   // console.log(canvasEl);
@@ -24,7 +24,7 @@ window.Webflow.push(() => {
   let analyzer;
   let bufferLenth: number;
 
-  //console.log(audioLinks);
+  console.log(audioLinks);
 
   if (!dbAudioEl || !ctx) return;
 
@@ -48,7 +48,7 @@ window.Webflow.push(() => {
   //   audioContexts.push(audCtx);
   // });
 
-  //console.log(audioSources);
+  // console.log(audioSources);
   // console.log(audioContexts);
 
   dbAudioEl.forEach((el, i) => {
