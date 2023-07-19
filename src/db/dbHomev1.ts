@@ -1,5 +1,6 @@
 //import { animate } from './animation';
 import { handleVideoUpdate, videoTab } from './videoTabs';
+
 window.Webflow ||= [];
 window.Webflow.push(() => {
   console.log('Db script loaded');
