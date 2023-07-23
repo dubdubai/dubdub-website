@@ -3,7 +3,7 @@ import { handleVideoUpdate, videoTab } from './videoTabs';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  console.log('Db script loaded');
+  console.log('new Db script loaded');
 
   // const AudioContext = window.AudioContext || window.webkitAudioContext;
   //animate();
@@ -11,8 +11,12 @@ window.Webflow.push(() => {
   const audioHtml = document.getElementById('newAudio') as HTMLAudioElement;
   const audioLinks = document.querySelectorAll('audio');
   const canvasEl = document.querySelector('#audWave') as HTMLCanvasElement;
+  const pauseBtns = [...document.querySelectorAll('[db-element="pausebtn"]')];
+  const audListWrap = [...document.querySelectorAll('[db-element="audiolistwrap"]')];
+
+  console.log(pauseBtns);
   // console.log(canvasEl);
-  console.log(dbAudioEl);
+  //console.log(dbAudioEl);
   const HEIGHT = 200;
   const WIDTH = 500;
   const ctx = canvasEl.getContext('2d');
@@ -21,7 +25,7 @@ window.Webflow.push(() => {
 
   videoTab();
   handleVideoUpdate();
-
+  const clickNumber = 1;
   //let audioSource;
   let analyzer;
   let bufferLenth: number;
@@ -52,37 +56,89 @@ window.Webflow.push(() => {
     audioSources.push(audioSource);
     audioContexts.push(audCtx);
   });
-
-  console.log(audioSources);
-  console.log(audioContexts);
+  const playing = true;
+  // console.log(audioSources);
+  // console.log(audioContexts);
 
   dbAudioEl.forEach((el, i) => {
     el.addEventListener('click', function (e) {
       const audio = el.querySelector('audio') as HTMLAudioElement;
-      console.log(audio);
+      //console.log(audio);
+
+      // ////remove playing class from other elements
+      // dbAudioEl.forEach((el) => {
+      //   el.classList.remove('playing');
+      // });
+      // ////add playing class to the clicked  elements
+      // el.classList.add('playing');
 
       ////remove playing class from other elements
-      dbAudioEl.forEach((el) => {
+      audListWrap.forEach((el) => {
         el.classList.remove('playing');
       });
       ////add playing class to the clicked  elements
-      el.classList.add('playing');
+      //console.log(el.closest('.audiocol-item'));
+      el.closest('.audiocol-item')?.classList.add('playing');
+      // el.classList.add('playing');
 
       //check if other audios are playing and pause it
-      audioLinks.forEach((audio: HTMLAudioElement) => {
-        if (!audio.pause) return;
-        audio.pause();
-        audio.currentTime = 0;
-        audio.volume = 0.5;
+      audioLinks.forEach((audio: HTMLAudioElement, a) => {
+        if (i !== a) {
+          audio.pause();
+          audio.currentTime = 0;
+          audio.volume = clickNumber > 1 ? clickNumber * 0.5 : 1;
+          //audio.play();
+          console.log(audio.volume);
+          // audio.volume = 0.5;
+        }
       });
+
+      //initial code
+      // audioLinks.forEach((audio: HTMLAudioElement) => {
+      //   if (audio.pause) {
+      //     console.log(audio.pause());
+      //     audio.pause();
+      //     audio.currentTime = 0;
+      //     console.log('this one happen');
+      //     // audio.volume = 0.5;
+      //   }
+      // });
+      // audio.addEventListener('pause' )
+      // if (playing) {
+      //   audio.muted = false;
+      //   audio.play();
+      //   //playing = !playing;
+      //   // audioLinks.forEach((aud: HTMLAudioElement) => {
+      //   //   aud.addEventListener('playing', (e) => {
+      //   //     // console.log('audio dey play');
+      //   //     audio.play();
+      //   //     playing = !playing;
+      //   //   });
+      // } else {
+      //   audio.pause();
+      // }
+      // playing = !playing;
 
       // audio.addEventListener('playing', (e) => {
       //   console.log('playing');
       // });
 
       audio.muted = false;
+      audio.volume = clickNumber > 1 ? clickNumber * 0.5 : 0.5;
+
+      audio.load();
       audio.play();
+      //clickNumber--;
+      console.log(clickNumber);
+      //  console.log(audio.controller);
+
       if (audioContexts[i].state === 'suspended') audioContexts[i].resume(); /////   //console.log(audioContexts[i].state);
+
+      //
+      // pauseBtn?.addEventListener('click', (e) => {
+      //   console.log('clicked');
+      //   if (!audio.pause) audio.pause();
+      // });
 
       audio.setAttribute(`audioel`, `${i + 1}`);
       audio.classList.add('audiokoko');
@@ -94,6 +150,8 @@ window.Webflow.push(() => {
       audioSources[i].connect(analyzer);
       const gainNode = audioContexts[i].createGain();
       console.log(gainNode);
+      console.log(gainNode.gain.value);
+      //gainNode.gain.value = clickNumber > 1 ? clickNumber / clickNumber : 1;
 
       analyzer.connect(audioContexts[i].destination);
       analyzer.fftSize = 1024; ////how much data we want to process
@@ -106,13 +164,34 @@ window.Webflow.push(() => {
       drawTimeData(timeData);
       // drawFrequency(freqData);
       // drawFrequency(freqData);
-
+      /////events to handle icon visibility
+      audio.addEventListener('pause', () => {
+        el.closest('.audiocol-item')?.classList.remove('playing');
+        console.log('paused');
+        audio.volume = 0.5;
+      });
       audio.addEventListener('ended', (e) => {
-        el.classList.remove('playing');
+        el.closest('.audiocol-item')?.classList.remove('playing');
+        audio.volume = 0.5;
         console.log('end');
       });
     });
   });
+
+  ///end of the click event
+  pauseBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      const activeAudio = audioLinks[i] as HTMLAudioElement;
+      console.log(activeAudio);
+      activeAudio.pause();
+      activeAudio.volume = 0.5;
+    });
+  });
+
+  // pauseBtn?.addEventListener('click', (e) => {
+  //   console.log('clicked');
+  //   if (!audio.pause) audio.pause();
+  // });
 
   function drawTimeData(timeData) {
     if (!ctx) return;

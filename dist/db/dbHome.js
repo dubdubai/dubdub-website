@@ -1,1 +1,300 @@
-"use strict";(()=>{var k=[{language:"english",id:1,posterImg:"",contentcreator1:"https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",contentcreator2:"https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",animation:"https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",documentaries:"https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",tutorials:"http://google.com",entertainment:"http://google.com",coorporateVideos:"http://google.com",news:"https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4"},{language:"Spanish(port)",id:2,posterImg:"https://unsplash.com/s/photos/img",contentcreator1:"http://google.com",contentcreator2:"http://google.com",animation:"http://google.com",documentaries:"http://google.com",tutorials:"http://google.com",entertainment:"http://google.com",coorporateVideos:"http://google.com",news:"https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4"},{language:"spanish(latin)",id:3,posterImg:"https://unsplash.com/s/photos/img",contentcreator1:"http://google.com",contentcreator2:"http://google.com",animation:"http://google.com",documentaries:"http://google.com",tutorials:"http://google.com",entertainment:"http://google.com",coorporateVideos:"http://google.com",news:"http://google.com"},{language:"marathi",id:4,posterImg:"https://unsplash.com/s/photos/img",contentcreator1:"http://google.com",contentcreator2:"http://google.com",animation:"http://google.com",documentaries:"http://google.com",tutorials:"http://google.com",entertainment:"http://google.com",coorporateVideos:"http://google.com",news:"http://google.com"},{language:"german",id:5,posterImg:"https://unsplash.com/s/photos/img",contentcreator1:"http://google.com",contentcreator2:"http://google.com",animation:"http://google.com",documentaries:"http://google.com",tutorials:"http://google.com",entertainment:"http://google.com",coorporateVideos:"http://google.com",news:"http://google.com"},{language:"hindi",id:6,posterImg:"https://unsplash.com/s/photos/img",contentcreator1:"http://google.com",contentcreator2:"http://google.com",animation:"http://google.com",documentaries:"http://google.com",tutorials:"http://google.com",entertainment:"http://google.com",coorporateVideos:"http://google.com",news:"http://google.com"},{language:"cantonese",id:7,posterImg:"https://unsplash.com/s/photos/img",contentcreator1:"http://google.com",contentcreator2:"http://google.com",animation:"http://google.com",documentaries:"http://google.com",tutorials:"http://google.com",entertainment:"http://google.com",coorporateVideos:"http://google.com",news:"http://google.com"}],L=k;var q=[...document.querySelectorAll(".tab-btn")],U=document.querySelector('[db-tab="1"]'),T=document.querySelector(".language-wrap"),S=[...T.children],z=document.querySelector('[db-element="play"]'),f=document.querySelector('[db-element="video"]'),M=f.querySelector("source"),A=q.filter(s=>s.hasAttribute("db-tab")),I=function(s){f.poster="https://uploads-ssl.webflow.com/64a1953c1a72bd5a81a24f3d/64b2dd8d4c059eab34058ca3_videocover-min.webp",M.src=`${s}`,f.load(),f.play(),f.muted=!1},x=function(){T.addEventListener("click",s=>{let u=s.target;S.forEach(e=>{e.classList.remove("is-active")}),u.classList.add("is-active");let i=A.find(e=>e.classList.contains("active"));console.log(i),console.log(u);let l=u==null?void 0:u.getAttribute("db-tab");if(!l||!i)return;let c=+l,m=L.find(e=>e.id===c),t=i==null?void 0:i.getAttribute("db-vidname");if(!t)return;let n=m[t];I(n)})},H=function(){A.forEach(t=>{t.addEventListener("click",()=>{A.forEach(o=>{o.classList.remove("active")}),t.classList.add("active");let n=S.find(o=>o.classList.contains("is-active")),e=t.getAttribute("db-vidname"),h=n==null?void 0:n.getAttribute("db-tab");if(!h||!e)return;let d=+h,w=L.find(o=>o.id===d)[e];I(w)})});let s=document.querySelector('[db-section="videotab"]');if(!s)return;let u=function(t,n){t.forEach(e=>{e.isIntersecting&&(m.classList.add("is-active"),c.click(),l.unobserve(s))})},i={threshold:.2},l=new IntersectionObserver(u,i);l.observe(s);let[c]=A,[m]=S};window.Webflow||(window.Webflow=[]);window.Webflow.push(()=>{console.log("Db script loaded");let s=document.querySelectorAll("[db-audio]"),u=document.getElementById("newAudio"),i=document.querySelectorAll("audio"),l=document.querySelector("#audWave");console.log(s);let c=200,m=500,t=l.getContext("2d");l.width=m,l.height=c,H(),x();let n,e;if(!s||!t)return;let h=[],d=[];i.forEach((o,r)=>{let g=new AudioContext,a=g.createMediaElementSource(o);o.setAttribute("audioel",`${r+1}`),o.classList.add("audiokoko"),h.push(a),d.push(g)}),console.log(h),console.log(d),s.forEach((o,r)=>{o.addEventListener("click",function(g){let a=o.querySelector("audio");console.log(a),s.forEach(p=>{p.classList.remove("playing")}),o.classList.add("playing"),i.forEach(p=>{p.pause&&(p.pause(),p.currentTime=0,p.volume=.5)}),a.muted=!1,a.play(),d[r].state==="suspended"&&d[r].resume(),a.setAttribute("audioel",`${r+1}`),a.classList.add("audiokoko"),n=d[r].createAnalyser(),h[r].connect(n);let b=d[r].createGain();console.log(b),n.connect(d[r].destination),n.fftSize=1024,e=n.frequencyBinCount;let v=new Uint8Array(e),y=new Uint8Array(e),V=new Uint8Array(e);E(y),a.addEventListener("ended",p=>{o.classList.remove("playing"),console.log("end")})})});function E(o){if(!t)return;n.getByteTimeDomainData(o),t.clearRect(0,0,m,c),t.lineWidth=1.5,t.strokeStyle="#796EAD80",t.beginPath();let r=m/e,g=0;o.forEach((a,b)=>{let y=a/128*c/2;b===0?t.moveTo(g,y):t.lineTo(g,y),g+=r}),t.stroke(),requestAnimationFrame(()=>E(o))}function w(o){if(!t)return;n.getByteFrequencyData(o),console.log(o),t.clearRect(0,0,m,c),t.lineWidth=1.5,t.strokeStyle="#796EAD80",t.beginPath();let r=m/e,g=0;o.forEach(a=>{let b=a/255,v=c*b;t.fillStyle="#796EAD80",t.fillRect(g,c-v,r,v),g+=r+2}),requestAnimationFrame(()=>w(o))}});})();
+"use strict";
+(() => {
+  // bin/live-reload.js
+  new EventSource(`${"http://localhost:3000"}/esbuild`).addEventListener("change", () => location.reload());
+
+  // src/db/videoDataStructure.ts
+  var videoLinks = [
+    {
+      language: "english",
+      id: 1,
+      posterImg: "",
+      contentcreator1: "https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",
+      contentcreator2: "https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",
+      animation: "https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",
+      documentaries: "https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4",
+      tutorials: "http://google.com",
+      entertainment: "http://google.com",
+      coorporateVideos: "http://google.com",
+      news: "https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4"
+    },
+    {
+      language: "Spanish(port)",
+      id: 2,
+      posterImg: "https://unsplash.com/s/photos/img",
+      contentcreator1: "http://google.com",
+      contentcreator2: "http://google.com",
+      animation: "http://google.com",
+      documentaries: "http://google.com",
+      tutorials: "http://google.com",
+      entertainment: "http://google.com",
+      coorporateVideos: "http://google.com",
+      news: "https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4"
+    },
+    {
+      language: "spanish(latin)",
+      id: 3,
+      posterImg: "https://unsplash.com/s/photos/img",
+      contentcreator1: "http://google.com",
+      contentcreator2: "http://google.com",
+      animation: "http://google.com",
+      documentaries: "http://google.com",
+      tutorials: "http://google.com",
+      entertainment: "http://google.com",
+      coorporateVideos: "http://google.com",
+      news: "http://google.com"
+    },
+    {
+      language: "marathi",
+      id: 4,
+      posterImg: "https://unsplash.com/s/photos/img",
+      contentcreator1: "http://google.com",
+      contentcreator2: "http://google.com",
+      animation: "http://google.com",
+      documentaries: "http://google.com",
+      tutorials: "http://google.com",
+      entertainment: "http://google.com",
+      coorporateVideos: "http://google.com",
+      news: "http://google.com"
+    },
+    {
+      language: "german",
+      id: 5,
+      posterImg: "https://unsplash.com/s/photos/img",
+      contentcreator1: "http://google.com",
+      contentcreator2: "http://google.com",
+      animation: "http://google.com",
+      documentaries: "http://google.com",
+      tutorials: "http://google.com",
+      entertainment: "http://google.com",
+      coorporateVideos: "http://google.com",
+      news: "http://google.com"
+    },
+    {
+      language: "hindi",
+      id: 6,
+      posterImg: "https://unsplash.com/s/photos/img",
+      contentcreator1: "http://google.com",
+      contentcreator2: "http://google.com",
+      animation: "http://google.com",
+      documentaries: "http://google.com",
+      tutorials: "http://google.com",
+      entertainment: "http://google.com",
+      coorporateVideos: "http://google.com",
+      news: "http://google.com"
+    },
+    {
+      language: "cantonese",
+      id: 7,
+      posterImg: "https://unsplash.com/s/photos/img",
+      contentcreator1: "http://google.com",
+      contentcreator2: "http://google.com",
+      animation: "http://google.com",
+      documentaries: "http://google.com",
+      tutorials: "http://google.com",
+      entertainment: "http://google.com",
+      coorporateVideos: "http://google.com",
+      news: "http://google.com"
+    }
+  ];
+  var videoDataStructure_default = videoLinks;
+
+  // src/db/videoTabs.ts
+  var vidTabbtn = [...document.querySelectorAll(".tab-btn")];
+  var firstBtn = document.querySelector('[db-tab="1"]');
+  var langBtnWrap = document.querySelector(".language-wrap");
+  var btnchild = [...langBtnWrap.children];
+  var playBtn = document.querySelector('[db-element="play"]');
+  var videoUrlWrap = document.querySelector('[db-element="video"]');
+  var videoSourceUrl = videoUrlWrap.querySelector("source");
+  var activeVidbtn = vidTabbtn.filter((el) => {
+    return el.hasAttribute("db-tab");
+  });
+  var renderVideo = function(url) {
+    videoUrlWrap.poster = `https://uploads-ssl.webflow.com/64a1953c1a72bd5a81a24f3d/64b2dd8d4c059eab34058ca3_videocover-min.webp`;
+    videoSourceUrl.src = `${url}`;
+    videoUrlWrap.load();
+    videoUrlWrap.play();
+    videoUrlWrap.muted = false;
+  };
+  var handleVideoUpdate = function() {
+    langBtnWrap.addEventListener("click", (e) => {
+      const clickedTarget = e.target;
+      btnchild.forEach((btn) => {
+        btn.classList.remove("is-active");
+      });
+      clickedTarget.classList.add("is-active");
+      const activeTabBtn = activeVidbtn.find((btnLang) => btnLang.classList.contains("active"));
+      console.log(activeTabBtn);
+      console.log(clickedTarget);
+      const attNum = clickedTarget?.getAttribute("db-tab");
+      if (!attNum || !activeTabBtn)
+        return;
+      const idNum = +attNum;
+      const urlDetails = videoDataStructure_default.find((links) => {
+        return links.id === idNum;
+      });
+      const getVideoName = activeTabBtn?.getAttribute("db-vidname");
+      if (!getVideoName)
+        return;
+      const videoUrl = urlDetails[getVideoName];
+      renderVideo(videoUrl);
+    });
+  };
+  var videoTab = function() {
+    activeVidbtn.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        activeVidbtn.forEach((btn2) => {
+          btn2.classList.remove("active");
+        });
+        btn.classList.add("active");
+        const activeBtn = btnchild.find((btnLang) => btnLang.classList.contains("is-active"));
+        const clickedName = btn.getAttribute("db-vidname");
+        const attNum = activeBtn?.getAttribute("db-tab");
+        if (!attNum || !clickedName)
+          return;
+        const idNum = +attNum;
+        const urlDetails = videoDataStructure_default.find((links) => {
+          return links.id === idNum;
+        });
+        const videoUrl = urlDetails[clickedName];
+        renderVideo(videoUrl);
+      });
+    });
+    const vidTabSection = document.querySelector('[db-section="videotab"]');
+    if (!vidTabSection)
+      return;
+    const videoActive = function(entries, et) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          firstLangBtn.classList.add("is-active");
+          firstTabBtn.click();
+          tabObserve.unobserve(vidTabSection);
+        }
+      });
+    };
+    const options = {
+      threshold: 0.2
+    };
+    const tabObserve = new IntersectionObserver(videoActive, options);
+    tabObserve.observe(vidTabSection);
+    const [firstTabBtn] = activeVidbtn;
+    const [firstLangBtn] = btnchild;
+  };
+
+  // src/db/dbHome.ts
+  window.Webflow ||= [];
+  window.Webflow.push(() => {
+    console.log("Db script loaded");
+    const dbAudioEl = document.querySelectorAll("[db-audio]");
+    const audioHtml = document.getElementById("newAudio");
+    const audioLinks = document.querySelectorAll("audio");
+    const canvasEl = document.querySelector("#audWave");
+    console.log(dbAudioEl);
+    const HEIGHT = 200;
+    const WIDTH = 500;
+    const ctx = canvasEl.getContext("2d");
+    canvasEl.width = WIDTH;
+    canvasEl.height = HEIGHT;
+    videoTab();
+    handleVideoUpdate();
+    let analyzer;
+    let bufferLenth;
+    if (!dbAudioEl || !ctx)
+      return;
+    const audioSources = [];
+    const audioContexts = [];
+    audioLinks.forEach((audio, i) => {
+      const audCtx = new AudioContext();
+      const audioSource = audCtx.createMediaElementSource(audio);
+      audio.setAttribute(`audioel`, `${i + 1}`);
+      audio.classList.add("audiokoko");
+      audioSources.push(audioSource);
+      audioContexts.push(audCtx);
+    });
+    console.log(audioSources);
+    console.log(audioContexts);
+    dbAudioEl.forEach((el, i) => {
+      el.addEventListener("click", function(e) {
+        const audio = el.querySelector("audio");
+        console.log(audio);
+        dbAudioEl.forEach((el2) => {
+          el2.classList.remove("playing");
+        });
+        el.classList.add("playing");
+        audioLinks.forEach((audio2) => {
+          if (!audio2.pause)
+            return;
+          audio2.pause();
+          audio2.currentTime = 0;
+          audio2.volume = 0.5;
+        });
+        audio.muted = false;
+        audio.play();
+        if (audioContexts[i].state === "suspended")
+          audioContexts[i].resume();
+        audio.setAttribute(`audioel`, `${i + 1}`);
+        audio.classList.add("audiokoko");
+        analyzer = audioContexts[i].createAnalyser();
+        audioSources[i].connect(analyzer);
+        const gainNode = audioContexts[i].createGain();
+        console.log(gainNode);
+        analyzer.connect(audioContexts[i].destination);
+        analyzer.fftSize = 1024;
+        bufferLenth = analyzer.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLenth);
+        const timeData = new Uint8Array(bufferLenth);
+        const freqData = new Uint8Array(bufferLenth);
+        drawTimeData(timeData);
+        audio.addEventListener("ended", (e2) => {
+          el.classList.remove("playing");
+          console.log("end");
+        });
+      });
+    });
+    function drawTimeData(timeData) {
+      if (!ctx)
+        return;
+      analyzer.getByteTimeDomainData(timeData);
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "#796EAD80";
+      ctx.beginPath();
+      const sliceWidth = WIDTH / bufferLenth;
+      let x = 0;
+      timeData.forEach((data, i) => {
+        const v = data / 128;
+        const y = v * HEIGHT / 2;
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+        x += sliceWidth;
+      });
+      ctx.stroke();
+      requestAnimationFrame(() => drawTimeData(timeData));
+    }
+    function drawFrequency(freqData) {
+      if (!ctx)
+        return;
+      analyzer.getByteFrequencyData(freqData);
+      console.log(freqData);
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "#796EAD80";
+      ctx.beginPath();
+      const barWidth = WIDTH / bufferLenth;
+      let x = 0;
+      freqData.forEach((amount) => {
+        const percent = amount / 255;
+        const berHeight = HEIGHT * percent;
+        ctx.fillStyle = "#796EAD80";
+        ctx.fillRect(x, HEIGHT - berHeight, barWidth, berHeight);
+        x += barWidth + 2;
+      });
+      requestAnimationFrame(() => drawFrequency(freqData));
+    }
+  });
+})();
+//# sourceMappingURL=dbHome.js.map
