@@ -5,7 +5,6 @@ window.Webflow ||= [];
 window.Webflow.push(() => {
   console.log('new Db script loaded');
 
-  // const AudioContext = window.AudioContext || window.webkitAudioContext;
   //animate();
   const dbAudioEl = document.querySelectorAll('[db-audio]');
   const audioHtml = document.getElementById('newAudio') as HTMLAudioElement;
@@ -14,20 +13,22 @@ window.Webflow.push(() => {
   const pauseBtns = [...document.querySelectorAll('[db-element="pausebtn"]')];
   const audListWrap = [...document.querySelectorAll('[db-element="audiolistwrap"]')];
 
-  console.log(pauseBtns);
+  const screenSize = window.innerWidth;
   // console.log(canvasEl);
   //console.log(dbAudioEl);
   const HEIGHT = 200;
-  const WIDTH = 500;
+  const WIDTH = screenSize < 500 ? 320 : 500;
   const ctx = canvasEl.getContext('2d');
   canvasEl.width = WIDTH;
   canvasEl.height = HEIGHT;
+  console.log(canvasEl.width);
 
   videoTab();
   handleVideoUpdate();
+
   const clickNumber = 1;
   //let audioSource;
-  let analyzer;
+  let analyzer: Array<AnalyserNode>;
   let bufferLenth: number;
   //let audioSource;
 
@@ -43,41 +44,25 @@ window.Webflow.push(() => {
     const audioSource = audCtx.createMediaElementSource(audio);
     audio.setAttribute(`audioel`, `${i + 1}`);
     audio.classList.add('audiokoko');
-    // analyzer = audCtx.createAnalyser();
-    // audioSource.connect(analyzer);
-    // analyzer.connect(audCtx.destination);
-    // analyzer.fftSize = 64;
-    // bufferLenth = analyzer.frequencyBinCount;
-    // //const dataArray = new Uint8Array(bufferLenth);
-
-    // console.log(bufferLenth);
-
     //Pusing and creating array for tha audio context and audio souces
     audioSources.push(audioSource);
     audioContexts.push(audCtx);
   });
-  const playing = true;
+
+  //  const playing = true;
   // console.log(audioSources);
   // console.log(audioContexts);
 
   dbAudioEl.forEach((el, i) => {
     el.addEventListener('click', function (e) {
       const audio = el.querySelector('audio') as HTMLAudioElement;
-      //console.log(audio);
-
-      // ////remove playing class from other elements
-      // dbAudioEl.forEach((el) => {
-      //   el.classList.remove('playing');
-      // });
-      // ////add playing class to the clicked  elements
-      // el.classList.add('playing');
 
       ////remove playing class from other elements
       audListWrap.forEach((el) => {
         el.classList.remove('playing');
       });
       ////add playing class to the clicked  elements
-      //console.log(el.closest('.audiocol-item'));
+
       el.closest('.audiocol-item')?.classList.add('playing');
       // el.classList.add('playing');
 
@@ -92,36 +77,6 @@ window.Webflow.push(() => {
           // audio.volume = 0.5;
         }
       });
-
-      //initial code
-      // audioLinks.forEach((audio: HTMLAudioElement) => {
-      //   if (audio.pause) {
-      //     console.log(audio.pause());
-      //     audio.pause();
-      //     audio.currentTime = 0;
-      //     console.log('this one happen');
-      //     // audio.volume = 0.5;
-      //   }
-      // });
-      // audio.addEventListener('pause' )
-      // if (playing) {
-      //   audio.muted = false;
-      //   audio.play();
-      //   //playing = !playing;
-      //   // audioLinks.forEach((aud: HTMLAudioElement) => {
-      //   //   aud.addEventListener('playing', (e) => {
-      //   //     // console.log('audio dey play');
-      //   //     audio.play();
-      //   //     playing = !playing;
-      //   //   });
-      // } else {
-      //   audio.pause();
-      // }
-      // playing = !playing;
-
-      // audio.addEventListener('playing', (e) => {
-      //   console.log('playing');
-      // });
 
       audio.muted = false;
       audio.volume = clickNumber > 1 ? clickNumber * 0.5 : 0.5;
