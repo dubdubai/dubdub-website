@@ -9,8 +9,7 @@ const btnchild = [...langBtnWrap.children];
 const playBtn = document.querySelector('[db-element="play"]') as HTMLElement;
 const videoUrlWrap = document.querySelector('[db-element="video"]') as HTMLVideoElement;
 const videoSourceUrl = videoUrlWrap.querySelector('source') as HTMLSourceElement;
-
-//console.log(playBtn);
+const videoEl = document.querySelector('[db-element="video"]') as HTMLVideoElement;
 
 const activeVidbtn = vidTabbtn.filter((el) => {
   return el.hasAttribute('db-tab');
@@ -36,12 +35,11 @@ export const handleVideoUpdate = function () {
 
     ///adding active class to the clicked element
     clickedTarget.classList.add('is-active');
-    //  btnchild.;
 
     ///getting the tab Btn with active class
     const activeTabBtn = activeVidbtn.find((btnLang) => btnLang.classList.contains('active'));
-    console.log(activeTabBtn);
-    console.log(clickedTarget);
+    // console.log(activeTabBtn);
+    // console.log(clickedTarget);
 
     const attNum = clickedTarget?.getAttribute('db-tab');
     if (!attNum || !activeTabBtn) return;
@@ -59,10 +57,6 @@ export const handleVideoUpdate = function () {
     renderVideo(videoUrl);
     //console.log(videoUrl);
   });
-
-  // playBtn.addEventListener('click', (e) => {
-  //   console.log(e.target);
-  // });
 };
 
 export const videoTab = function () {
@@ -98,14 +92,19 @@ export const videoTab = function () {
 
   //select the fist element when scrolled into view
   const vidTabSection = document.querySelector('[db-section="videotab"]') as HTMLElement;
-  if (!vidTabSection) return;
+  const vidContainer = document.querySelector('[db-element="video-container"]') as HTMLElement;
+
+  if (!vidTabSection || !vidContainer) return;
+
   const videoActive = function (entries: Array<object>, et) {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         firstLangBtn.classList.add('is-active');
         firstTabBtn.click();
 
-        tabObserve.unobserve(vidTabSection);
+        //tabObserve.unobserve(vidTabSection);
+      } else {
+        videoEl.pause();
       }
     });
   };
@@ -114,27 +113,7 @@ export const videoTab = function () {
   };
   const tabObserve = new IntersectionObserver(videoActive, options) as IntersectionObserver;
 
-  tabObserve.observe(vidTabSection);
-
+  tabObserve.observe(vidContainer);
   const [firstTabBtn] = activeVidbtn;
   const [firstLangBtn] = btnchild;
-
-  //firstTabBtn.click();
-
-  //console.log(firstLangBtn);
-  //console.log(firstTabBtn);
-  //console.log(firstLangBtn, firstTabBtn);
-
-  ////performing the click function on page load
-  //   const [firstbtn] = activeVidbtn;
-  // firstBtn.click();
-  // //   firstbtn.click();
 };
-
-//<a posterimg="https://unsplash.com/s/photos/img" english-url="http://google.com" href="#" class="lng-btn w-button">US English</a>
-//is-active
-// <div class="language-wrap"><a href="#" class="lng-btn is-active w-button">US English</a><a href="#" class="lng-btn w-button">Spanish(Portugese)</a><a href="#" class="lng-btn w-button">Spanish(Latin)</a><a href="#" class="lng-btn w-button">Marathi</a><a href="#" class="lng-btn w-button">German</a><a href="#" class="lng-btn w-button">Hindi</a><a href="#" class="lng-btn w-button">Cantonese</a></div>
-
-// <div class="language-wrap"><a href="#" class="lng-btn is-active w-button">US English</a><a href="#" class="lng-btn w-button">Spanish(Portugese)</a><a href="#" class="lng-btn w-button">Spanish(Latin)</a><a href="#" class="lng-btn w-button">Marathi</a><a href="#" class="lng-btn w-button">German</a><a href="#" class="lng-btn w-button">Hindi</a><a href="#" class="lng-btn w-button">Cantonese</a></div>
-
-// <div class="language-wrap"><a english-url="" href="#" class="lng-btn is-active w-button">US English</a><a spanish-port="" href="#" class="lng-btn w-button">Spanish(Portugese)</a><a spanish-latin="" href="#" class="lng-btn w-button">Spanish(Latin)</a><a marathi-url="" href="#" class="lng-btn w-button">Marathi</a><a german-url="" href="#" class="lng-btn w-button">German</a><a hindi-url="" href="#" class="lng-btn w-button">Hindi</a><a cantonese-url="" href="#" class="lng-btn w-button">Cantonese</a></div>
