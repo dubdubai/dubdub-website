@@ -1,7 +1,7 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+// gsap.registerPlugin(ScrollTrigger);
 
 //console.log('dub');
 
@@ -18,6 +18,8 @@ export const animate = function () {
   const allTabs = document.querySelectorAll('.hdw-tab-link') as NodeListOf<HTMLElement>;
   const titleSec = document.querySelector('[db-element="workText"]');
   const optionBtn = document.querySelectorAll('.optionbtn') as NodeListOf<HTMLElement>;
+  const allSLideImg = [...document.querySelectorAll('[db-slideimg]')];
+  console.log(allSLideImg);
   const btnNormal = [...optionBtn];
 
   let tabTimeout;
@@ -30,9 +32,13 @@ export const animate = function () {
       optionBtn.forEach((el) => {
         el.classList.remove('active');
       });
+      allSLideImg.forEach((slide) => {
+        slide.classList.remove('slide-active');
+      });
       ///adding the active class
       // clearTimeout(tabSelectT);
       button.classList.add('active');
+      allSLideImg[i].classList.add('slide-active');
     });
   });
 
@@ -73,11 +79,11 @@ export const animate = function () {
       toggleActions: 'restart',
     },
     y: 400,
-    duration: 5.5,
-    ease: 'elastic.out(1, 0.3)',
+    duration: 1.5,
+    ease: 'power4.out',
   });
 
-  //dub-bg-logo
+  //Hero background logo dub-bg-logo
   gsap.to('.dub-bg-logo', {
     scrollTrigger: {
       trigger: '.more-efficient--section',
@@ -98,10 +104,11 @@ export const animate = function () {
       //markers: true,
       scrub: true,
     },
-    x: '-100rem',
-    stagger: -0.5,
+    y: '100rem',
+    //stagger: -0.5,
+    opacity: 0,
     scrub: true,
-    duration: 1,
+    duration: 0.5,
     ease: 'power2.out',
   });
 

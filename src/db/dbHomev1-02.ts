@@ -1,9 +1,9 @@
-//import { animate } from './animation';
+import { animate } from './animation';
 import { handleVideoUpdate, videoTab } from './videoTabs';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  console.log('dd Db script loaded');
+  console.log('errdd Db script loaded');
 
   //animate();
   const dbAudioEl = document.querySelectorAll('[db-audio]');
@@ -26,6 +26,7 @@ window.Webflow.push(() => {
 
   videoTab();
   handleVideoUpdate();
+  animate();
 
   const clickNumber = 1;
   //let audioSource;
