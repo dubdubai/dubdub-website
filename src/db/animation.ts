@@ -65,9 +65,6 @@ export const animate = function () {
   clearTimeout(tabLoop);
   tabLoop();
 
-  //selectBtn();
-  //timeout();
-
   if (!tabEl1 || !tabEl2 || !tabEl3) return;
 
   //console.log('db');
@@ -97,20 +94,20 @@ export const animate = function () {
     ease: 'slow(0.7, 0.7, false)',
   });
 
-  gsap.from('.efficient-card', {
-    scrollTrigger: {
-      trigger: '#blueAnchor',
-      start: 'center, center',
-      //markers: true,
-      scrub: true,
-    },
-    y: '100rem',
-    //stagger: -0.5,
-    opacity: 0,
-    scrub: true,
-    duration: 0.5,
-    ease: 'power2.out',
-  });
+  // gsap.from('.efficient-card', {
+  //   scrollTrigger: {
+  //     trigger: '#blueAnchor',
+  //     start: 'center, center',
+  //     //markers: true,
+  //     scrub: true,
+  //   },
+  //   y: '100rem',
+  //   //stagger: -0.5,
+  //   opacity: 0,
+  //   scrub: true,
+  //   duration: 0.5,
+  //   ease: 'power2.out',
+  // });
 
   const tl = gsap.timeline({ defaults: { ease: 'back.out(1.7)', duration: 2 } });
 

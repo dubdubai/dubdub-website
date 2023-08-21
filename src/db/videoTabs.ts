@@ -4,7 +4,8 @@ import videoLinks from './videoDataStructure';
 
 const vidTabbtn = [...document.querySelectorAll('.tab-btn')];
 const firstBtn = document.querySelector('[db-tab="1"]') as HTMLAnchorElement;
-const langBtnWrap = document.querySelector('.language-wrap') as HTMLElement;
+//const langBtnWrap = document.querySelector('.language-wrap') as HTMLElement;
+const langBtnWrap = document.querySelector('[video-lang]');
 const btnchild = [...langBtnWrap.children];
 const playBtn = document.querySelector('[db-element="play"]') as HTMLElement;
 const videoUrlWrap = document.querySelector('[db-element="video"]') as HTMLVideoElement;
@@ -95,6 +96,8 @@ export const videoTab = function () {
   const vidContainer = document.querySelector('[db-element="video-container"]') as HTMLElement;
 
   if (!vidTabSection || !vidContainer) return;
+  const [firstTabBtn] = activeVidbtn;
+  const [firstLangBtn] = btnchild;
 
   const videoActive = function (entries: Array<object>, et) {
     entries.forEach((entry) => {
@@ -114,6 +117,4 @@ export const videoTab = function () {
   const tabObserve = new IntersectionObserver(videoActive, options) as IntersectionObserver;
 
   tabObserve.observe(vidContainer);
-  const [firstTabBtn] = activeVidbtn;
-  const [firstLangBtn] = btnchild;
 };

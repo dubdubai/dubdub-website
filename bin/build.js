@@ -11,7 +11,7 @@ const ENTRY_POINTS = [
   'src/index.ts',
   'src/db/dbHome.ts',
   'src/db/dbHomeNew.ts',
-  'src/db/dbHomev1-02.ts',
+  'src/db/dbHomev1-03.ts',
 ];
 
 // Config dev serving

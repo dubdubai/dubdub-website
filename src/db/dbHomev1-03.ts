@@ -12,12 +12,28 @@ window.Webflow.push(() => {
   const canvasEl = document.querySelector('#audWave') as HTMLCanvasElement;
   const pauseBtns = [...document.querySelectorAll('[db-element="pausebtn"]')];
   const audListWrap = [...document.querySelectorAll('[db-element="audiolistwrap"]')];
+  const audioPlaybtn = document.querySelector('[db-audiobtn="play"]') as HTMLElement;
+  const audioPausebtn = document.querySelector('[db-audiobtn="pause"]') as HTMLElement;
+  const audioLottie = document.querySelectorAll('[audlottie]') as NodeListOf<HTMLElement>;
+  // console.log(audioLottie);
+
+  const playLottie = function () {
+    audioLottie.forEach((lottie: HTMLElement) => {
+      lottie.style.display = 'block';
+    });
+  };
+
+  const removeLottie = function () {
+    audioLottie.forEach((lottie: HTMLElement) => {
+      lottie.style.display = 'none';
+    });
+  };
 
   const screenSize = window.innerWidth;
   // console.log(canvasEl);
   //console.log(dbAudioEl);
   const HEIGHT = 200;
-  const WIDTH = screenSize < 500 ? 320 : 500;
+  const WIDTH = screenSize < 500 ? 320 : 300;
   const ctx = canvasEl.getContext('2d');
 
   canvasEl.width = WIDTH;
@@ -42,18 +58,15 @@ window.Webflow.push(() => {
   const audioContexts = [] as Array<AudioContext>;
 
   audioLinks.forEach((audio, i) => {
+    audio.load();
     const audCtx = new AudioContext();
     const audioSource = audCtx.createMediaElementSource(audio);
     audio.setAttribute(`audioel`, `${i + 1}`);
     audio.classList.add('audiokoko');
-    //Pusing and creating array for tha audio context and audio souces
+    //pushing and creating array for tha audio context and audio souces
     audioSources.push(audioSource);
     audioContexts.push(audCtx);
   });
-
-  //  const playing = true;
-  // console.log(audioSources);
-  // console.log(audioContexts);
 
   dbAudioEl.forEach((el, i) => {
     el.addEventListener('click', function (e) {
@@ -85,17 +98,16 @@ window.Webflow.push(() => {
 
       audio.load();
       audio.play();
+      ////
+      audioPlaybtn.style.display = 'none';
+      audioPausebtn.style.display = 'block';
+      //
+
       //clickNumber--;
       console.log(clickNumber);
       //  console.log(audio.controller);
 
       if (audioContexts[i].state === 'suspended') audioContexts[i].resume(); /////   //console.log(audioContexts[i].state);
-
-      //
-      // pauseBtn?.addEventListener('click', (e) => {
-      //   console.log('clicked');
-      //   if (!audio.pause) audio.pause();
-      // });
 
       audio.setAttribute(`audioel`, `${i + 1}`);
       audio.classList.add('audiokoko');
@@ -123,31 +135,60 @@ window.Webflow.push(() => {
       // drawFrequency(freqData);
 
       /////events to handle icon visibility
+
+      audio.addEventListener('play', () => {
+        playLottie();
+        audioPausebtn.style.display = 'block';
+        audioPlaybtn.style.display = 'none';
+        //audio.volume = 0.5;
+        console.log('audio playing');
+      });
+
       audio.addEventListener('pause', () => {
         el.closest('.audiocol-item')?.classList.remove('playing');
+        audioPausebtn.style.display = 'none';
+        audioPlaybtn.style.display = 'block';
         audio.volume = 0.5;
+        removeLottie();
       });
+
       audio.addEventListener('ended', (e) => {
         el.closest('.audiocol-item')?.classList.remove('playing');
+        removeLottie();
         audio.volume = 0.5;
+        console.log('audio ended');
       });
     });
   });
   ///end of the click event
 
+  /////new updates playbtn and pause btn handles separately
+
+  audioPlaybtn?.addEventListener('click', () => {
+    dbAudioEl[0].click();
+  });
+
+  // console.log(audioLinks);
+
   //pause functionality start
-  pauseBtns.forEach((btn, i) => {
-    btn.addEventListener('click', () => {
-      const activeAudio = audioLinks[i] as HTMLAudioElement;
-      activeAudio.pause();
-      activeAudio.volume = 0.5;
+  // pauseBtns.forEach((btn, i) => {
+  //   btn.addEventListener('click', () => {
+  //     const activeAudio = audioLinks[i] as HTMLAudioElement;
+  //     activeAudio.pause();
+  //     activeAudio.volume = 0.5;
+  //   });
+  // });
+
+  audioPausebtn.addEventListener('click', () => {
+    audioLinks.forEach((audio) => {
+      audio.pause();
     });
   });
+
   //pause functionality end
   //////////////////Intersection Observer
   ////pause audio when out of view
   const heroSection = document.querySelector('[db-element="home-header"]');
-  console.log(heroSection);
 
   const homeoptions = {
     threshold: 0.3,
@@ -196,38 +237,38 @@ window.Webflow.push(() => {
     requestAnimationFrame(() => drawTimeData(timeData));
   }
 
-  function drawFrequency(freqData) {
-    if (!ctx) return;
-    analyzer.getByteFrequencyData(freqData);
+  // function drawFrequency(freqData) {
+  //   if (!ctx) return;
+  //   analyzer.getByteFrequencyData(freqData);
 
-    console.log(freqData);
-    /////Clear the canvas
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+  //   console.log(freqData);
+  //   /////Clear the canvas
+  //   ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = '#796EAD80';
-    ctx.beginPath();
-    const barWidth = WIDTH / bufferLenth;
-    let x = 0;
-    freqData.forEach((amount) => {
-      //0 to 255
-      const percent = amount / 255;
-      const berHeight = HEIGHT * percent;
-      //convert the color to hsl todo
-      ctx.fillStyle = '#796EAD80';
-      // const v = data / 128;
-      // const y = (v * HEIGHT) / 2;
-      // ////draw linws
-      // if (i === 0) {
-      //   ctx.moveTo(x, y);
-      // } else {
-      //   ctx.lineTo(x, y);
-      // }
-      // x += sliceWidth;
-      ctx.fillRect(x, HEIGHT - berHeight, barWidth, berHeight);
-      x += barWidth + 2;
-    });
+  //   ctx.lineWidth = 1.5;
+  //   ctx.strokeStyle = '#796EAD80';
+  //   ctx.beginPath();
+  //   const barWidth = WIDTH / bufferLenth;
+  //   let x = 0;
+  //   freqData.forEach((amount) => {
+  //     //0 to 255
+  //     const percent = amount / 255;
+  //     const berHeight = HEIGHT * percent;
+  //     //convert the color to hsl todo
+  //     ctx.fillStyle = '#796EAD80';
+  //     // const v = data / 128;
+  //     // const y = (v * HEIGHT) / 2;
+  //     // ////draw linws
+  //     // if (i === 0) {
+  //     //   ctx.moveTo(x, y);
+  //     // } else {
+  //     //   ctx.lineTo(x, y);
+  //     // }
+  //     // x += sliceWidth;
+  //     ctx.fillRect(x, HEIGHT - berHeight, barWidth, berHeight);
+  //     x += barWidth + 2;
+  //   });
 
-    requestAnimationFrame(() => drawFrequency(freqData));
-  }
+  //   requestAnimationFrame(() => drawFrequency(freqData));
+  // }
 });
