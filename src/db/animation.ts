@@ -18,9 +18,10 @@ export const animate = function () {
   const allTabs = document.querySelectorAll('.hdw-tab-link') as NodeListOf<HTMLElement>;
   const titleSec = document.querySelector('[db-element="workText"]');
   const optionBtn = document.querySelectorAll('.optionbtn') as NodeListOf<HTMLElement>;
+  const mboptionBtn = document.querySelectorAll('.mb-optionbtn') as NodeListOf<HTMLElement>;
   const allSLideImg = [...document.querySelectorAll('[db-slideimg]')];
-  console.log(allSLideImg);
   const btnNormal = [...optionBtn];
+  const mbBtnnormal = [...mboptionBtn];
 
   let tabTimeout;
   //let clearTimeout;
@@ -109,70 +110,80 @@ export const animate = function () {
   //   ease: 'power2.out',
   // });
 
-  const tl = gsap.timeline({ defaults: { ease: 'back.out(1.7)', duration: 2 } });
+  ////starting the animation based on screensize
 
-  tl.from('.hdw_content-col-1, .btn-anim', {
-    opacity: 0,
-    y: 300,
-  });
+  const screenSize = window.innerWidth;
 
-  tl.from('.screenshot-bg-icon', { y: -100, opacity: 0 }, '.5')
-    .from('.screenshot-wrap', { x: 100, opacity: 0 }, '.9')
-    .from(
-      '.float-text, .float-text-2',
-      {
-        x: -70,
-        opacity: 0,
-        y: 20,
+  if (screenSize > 767) {
+    console.log('start');
+
+    const tl = gsap.timeline({ defaults: { ease: 'back.out(1.7)', duration: 2 } });
+
+    tl.from('.hdw_content-col-1, .btn-anim', {
+      opacity: 0,
+      y: 300,
+    });
+
+    tl.from('.screenshot-bg-icon', { y: -100, opacity: 0 }, '.5')
+      .from('.screenshot-wrap', { x: 100, opacity: 0 }, '.9')
+      .from(
+        '.float-text, .float-text-2',
+        {
+          x: -70,
+          opacity: 0,
+          y: 20,
+        },
+        '.5'
+      );
+
+    ScrollTrigger.create({
+      trigger: scrollE1,
+      onEnter: () => {
+        tabEl1.click();
       },
-      '.5'
-    );
+      animation: tl,
+      //scrub: 1,
+      toggleActions: 'restart none restart none',
+      //markers: true,
+      start: '20 55%',
+      onEnterBack: () => {
+        tabEl1.click();
+      },
+    });
+    /////
+    ScrollTrigger.create({
+      trigger: scrollE2,
+      //markers: true,
+      start: 'top 0%',
+      onEnter: () => {
+        console.log('blueEnter');
+        tabEl2.click();
+      },
+      animation: tl,
+      toggleActions: 'restart none restart none',
+      onEnterBack: () => {
+        tabEl2.click();
+      },
+    });
 
-  ScrollTrigger.create({
-    trigger: scrollE1,
-    onEnter: () => {
-      tabEl1.click();
-    },
-    animation: tl,
-    //scrub: 1,
-    toggleActions: 'restart none restart none',
-    //markers: true,
-    start: '20 55%',
-    onEnterBack: () => {
-      tabEl1.click();
-    },
-  });
-  /////
-  ScrollTrigger.create({
-    trigger: scrollE2,
-    //markers: true,
-    start: 'top 0%',
-    onEnter: () => {
-      console.log('blueEnter');
-      tabEl2.click();
-    },
-    animation: tl,
-    toggleActions: 'restart none restart none',
-    onEnterBack: () => {
-      tabEl2.click();
-    },
-  });
+    ScrollTrigger.create({
+      trigger: scrollE3,
+      //markers: true,
+      start: 'top 0%',
+      animation: tl,
+      toggleActions: 'restart',
 
-  ScrollTrigger.create({
-    trigger: scrollE3,
-    //markers: true,
-    start: 'top 0%',
-    animation: tl,
-    toggleActions: 'restart',
-
-    onEnter: () => {
-      console.log('yellow enter first');
-      tabEl3.click();
-    },
-    onEnterBack: () => {
-      //console.log('yellow second enter');
-    },
-  });
+      onEnter: () => {
+        console.log('yellow enter first');
+        tabEl3.click();
+      },
+      onEnterBack: () => {
+        //console.log('yellow second enter');
+      },
+    });
+  } else {
+    console.log('this here');
+  }
 };
 
 //more-efficeint--content
