@@ -4,13 +4,13 @@ const videoLinks = [
     id: 1 as number,
     posterImg: '',
     contentcreator1:
-      'https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4' as string,
+      'https://dl.dropboxusercontent.com/s/aa02rbzovlouyqknbgblw/Input%20website%20videos.mp4' as string,
     contentcreator2:
-      'https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4' as string,
+      'https://dl.dropboxusercontent.com/s/kg3xdg9kn4yasm1vluaut/Input%20website%20videos.mp4' as string,
     animation:
-      'https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4' as string,
+      'https://dl.dropboxusercontent.com/s/jpo10ivbtkk5re123nwhy/Input%20website%20videos.mp4' as string,
     documentaries:
-      'https://dl.dropboxusercontent.com/s/6ozrrrfnti2fmty/Input%20website%20videos.mp4' as string,
+      'https://dl.dropboxusercontent.com/s/k0y32tn8hb6sve1uqw3qq/Input%20website%20videos.mp4' as string,
     tutorials: 'http://google.com' as string,
     entertainment: 'http://google.com' as string,
     coorporateVideos: 'http://google.com' as string,
